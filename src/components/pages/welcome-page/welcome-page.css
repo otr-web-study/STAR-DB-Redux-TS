@@ -1,0 +1,9 @@
+.welcome-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-page__title {
+  text-align: center;
+  padding-top: 2rem;
+}
