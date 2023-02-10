@@ -1,13 +1,25 @@
-import { Fragment, Children, cloneElement } from 'react';
+import { Fragment, Children, cloneElement, ReactElement } from 'react';
+import { Planet } from 'types';
 
-import { useDetailData } from '../hooks';
-import Spinner from '../spinner';
-
-import imgNotFound from '../../images/not_found.jpg';
 import './item-details.css';
 
 
-const Record = ({ item, field, label }) => {
+interface RecordProps {
+  label: string,
+  field: keyof Planet,
+  item: Planet,
+}
+
+interface ItemDetailsProps {
+  item: Planet, 
+  children: ReactElement<ItemViewProps>[],
+  image: string,
+  onImageError: () => void,
+}
+
+interface ItemViewProps extends ItemDetailsProps {}
+
+const Record = ({ item, field, label }: RecordProps) => {
   return (
     <li className="list-group-item">
       <span className="term">{label}</span>
@@ -16,16 +28,12 @@ const Record = ({ item, field, label }) => {
   );
 }
 
-const ItemDetails = ({ itemId, getData, getImageUrl, children }) => {
-  const [
-    item, image, isPending, onImageError
-  ] = useDetailData(itemId, getData, getImageUrl, imgNotFound);
+const ItemDetails = ({ image, item, onImageError, children }: ItemDetailsProps) => {
 
-  const select = (!item && !isPending) && (
+  const select = (!item) && (
     <h3 className='item-title'> &lt;-Select item</h3>
   );
-  const spinner = isPending && <Spinner />;
-  const content = (item && !isPending) && (
+  const content = (item) && (
     <ItemView item={item} image={image} onImageError={onImageError}>
       {Children.map(children, (child) => {
         return cloneElement(child, {item});
@@ -35,14 +43,13 @@ const ItemDetails = ({ itemId, getData, getImageUrl, children }) => {
 
   return (
     <div className="item-details card">
-      {spinner}
       {content}
       {select}
     </div>
   )
 }
 
-const ItemView = ({ item: { name }, image, children, onImageError }) => {
+const ItemView = ({ item: { name }, image, children, onImageError }: ItemViewProps) => {
   return (
     <Fragment>
       <img className="item-image"
