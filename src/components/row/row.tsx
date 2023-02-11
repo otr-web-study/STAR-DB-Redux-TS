@@ -1,7 +1,15 @@
+import { ReactNode } from 'react';
+
 import './row.css';
 
 
-const Row = ({ left, right }) => {
+interface RowProps {
+  left: ReactNode,
+  right: ReactNode,
+}
+
+
+const Row = ({ left, right }: RowProps) => {
   return (
     <div className="row mb2">
       <div className="col-md-6">

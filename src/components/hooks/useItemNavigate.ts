@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 
-const useItemNavigate = () => {
+const useItemNavigate = (): [(itemId:string) => void] => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const onItemSelected = (itemId) => {
+  const onItemSelected = (itemId: string) => {
     if (id) {
       return navigate(`../${itemId}`)
     }

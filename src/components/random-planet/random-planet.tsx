@@ -1,4 +1,4 @@
-import useRandomPlanet from 'futures/planets/random-planet-hook';
+import useRandomPlanet from 'components/hooks/uesRandomPlanet';
 
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator/error-indicator';

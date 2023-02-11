@@ -1,25 +1,36 @@
 import { Fragment, Children, cloneElement, ReactElement } from 'react';
+
+import { useDetailData } from 'components/hooks';
 import { Planet } from 'types';
 
 import './item-details.css';
+import { AllItems } from 'types/items';
+import { SelectItemById } from 'types/selectors';
 
 
 interface RecordProps {
   label: string,
   field: keyof Planet,
-  item: Planet,
+  item?: Planet,
 }
 
-interface ItemDetailsProps {
-  item: Planet, 
+export interface ItemDetailsProps<S> {
   children: ReactElement<ItemViewProps>[],
-  image: string,
-  onImageError: () => void,
+  selector: S,
 }
 
-interface ItemViewProps extends ItemDetailsProps {}
+interface ItemViewProps {
+  item: Planet,
+  image: string | undefined,
+  onImageError: () => void,
+  children: ReactElement<ItemViewProps>[],
+}
 
 const Record = ({ item, field, label }: RecordProps) => {
+  if (!item) {
+    return null;
+  }
+  
   return (
     <li className="list-group-item">
       <span className="term">{label}</span>
@@ -28,7 +39,11 @@ const Record = ({ item, field, label }: RecordProps) => {
   );
 }
 
-const ItemDetails = ({ image, item, onImageError, children }: ItemDetailsProps) => {
+const ItemDetails = <
+  T extends AllItems, S extends SelectItemById
+>({ children, selector }: ItemDetailsProps<S>) => {
+
+  const [item, image, onImageError ] = useDetailData<T, S>(selector)
 
   const select = (!item) && (
     <h3 className='item-title'> &lt;-Select item</h3>

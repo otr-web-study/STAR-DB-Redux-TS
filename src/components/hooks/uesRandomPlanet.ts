@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from 'redux-hooks';
+import { useParams } from 'react-router-dom';
 
 import { loadPlanets } from 'futures/planets/planet-actions';
-import { selectPlanetById, selectStatus, selectTotalPlanets } from 'futures/planets/planet-selectors';
+import { selectPlanetById, selectStatus, selectPlanetIds } from 'futures/planets/planet-selectors';
 
 import imgNotFound from 'images/not_found.jpg';
 import { Planet, Status } from 'types';
@@ -14,15 +15,19 @@ type RandomPlanetHook = [
   () => void,
 ]
 
-const randomPlanetId = (totalPlanets: number): number => (Math.floor(Math.random() * totalPlanets) + 1);
+const randomPlanetId = (ids: string[]): string => {
+  const totalPlanets = ids.length;
+  return totalPlanets ?
+    ids[Math.floor(Math.random() * totalPlanets)] :
+    '';
+};
 
 const useRandomPlanet = (): RandomPlanetHook => {
-  const totalPlanets = useAppSelector(selectTotalPlanets);
+  const ids = useAppSelector(selectPlanetIds) as string[];
   const [image, setImage] = useState<string>();
-  const [id, setId] = useState(randomPlanetId(totalPlanets))
+  const [id, setId] = useState(randomPlanetId(ids))
   const planet = useAppSelector((state) => selectPlanetById(state, id));
   const status = useAppSelector(selectStatus);
-
 
   const dispatch = useAppDispatch();
 
@@ -33,13 +38,16 @@ const useRandomPlanet = (): RandomPlanetHook => {
   }, [planet])
 
   const updatePlanet = useCallback(() => {
-    setId(randomPlanetId(totalPlanets));
-  }, [totalPlanets]);
+    setId(randomPlanetId(ids));
+  }, [ids]);
 
   useEffect(() => {
-    if (!planet)
-      dispatch(loadPlanets());
-  }, [planet, dispatch]);
+    if (!ids.length) {
+      dispatch(loadPlanets('1'));
+    } else {
+      updatePlanet();
+    }
+  }, [ids, dispatch, updatePlanet]);
 
   useEffect(() => {
     const interval = setInterval(updatePlanet, 15000);

@@ -1,16 +1,12 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 
-import { Status, Planet } from "types";
+import { Planet } from "types";
 import { loadPlanets } from "./planet-actions";
+import { defaultState, DefaultState } from "futures/state";
 
 export const planetsAdapter = createEntityAdapter<Planet>();
 
-const initialState = planetsAdapter.getInitialState<
-  {status:Status, error: string | null}
->({
-  status: 'idle',
-  error: null,
-});
+const initialState = planetsAdapter.getInitialState<DefaultState>(defaultState);
 
 const planetSlice = createSlice({
   name: 'planets',
@@ -26,8 +22,12 @@ const planetSlice = createSlice({
         state.error = 'Unknown error';
       })
       .addCase(loadPlanets.fulfilled, (state, action) => {
+        const { items, next, previous, page } = action.payload;
         state.status = 'received';
-        planetsAdapter.setAll(state, action.payload);
+        state.next = next;
+        state.previous = previous;
+        state.currPage = page;
+        planetsAdapter.setAll(state, items);
       })
   }
 });

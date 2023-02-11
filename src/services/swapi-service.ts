@@ -9,8 +9,14 @@ import {
   ApiVehicle 
 } from "types";
 
+
 type ApiType = ApiPlanet | ApiPerson | ApiStarship | ApiVehicle;
-type ServiceMultipleResponse<T extends ApiType> = { results: T[] };
+type LocalType = Planet | Person | Starship | Vehicle;
+type ServiceMultipleResponse<T extends ApiType> = { results: T[], next: string, previous: string };
+type SwapiServiceResponse = ApiType | ServiceMultipleResponse<ApiType>;
+export type MultipleResponse<T extends LocalType> = {
+  items: T[], next: boolean, previous: boolean, page: string
+};
 
 export class SwapiService {
   constructor(
@@ -19,13 +25,29 @@ export class SwapiService {
   ) {}
   
   
-  async getResource<T extends ApiType | ServiceMultipleResponse<ApiType>>(url: string): Promise<T> {
-    const res = await fetch(`${this._apiBase}${url}`);
+  async getResource<T extends SwapiServiceResponse>(url: string): Promise<T> {
+    let finalUrl = url;
+    if (!finalUrl.includes('http')) {
+      finalUrl = `${this._apiBase}${url}`;
+    }
+
+    const res = await fetch(finalUrl);
     const body = await res.json();
     if (! res.ok) {
       throw new Error(`Couldn't fetch ${url}, received ${res.status}`);
     }
     return body;
+  }
+
+  async getMultipleResource<T extends ApiType>(url: string): Promise<T[]> {
+    let curUrl = url;
+    let allItems: T[] = [];
+    while (curUrl) {
+      const response = this.getResource<ServiceMultipleResponse<T>>(curUrl);
+      allItems = [...allItems, ...(await response).results];
+      curUrl = (await response).next;
+    }
+    return allItems;
   }
 
   getAllPeople = async (): Promise<Person[]> => {
@@ -38,9 +60,14 @@ export class SwapiService {
     return this._transformPerson(person);
   }
 
-  getAllPlanets = async (): Promise<Planet[]> => {
-    const res = await this.getResource<ServiceMultipleResponse<ApiPlanet>>('/planets/');
-    return res.results.map(this._transformPlanet);
+  getPlanets = async (page: string): Promise<MultipleResponse<Planet>> => {
+    const res = await this.getResource<ServiceMultipleResponse<ApiPlanet>>(`/planets/?page=${page}`);
+    return {
+      next: !!res.next,
+      previous: !!res.previous,
+      items: res.results.map(this._transformPlanet),
+      page: page
+    };
   }
 
   getPlanet = async (id: string): Promise<Planet> => {

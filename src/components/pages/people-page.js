@@ -1,25 +1,18 @@
-import { usePageState } from "../hooks";
+import { useItemNavigate } from "../hooks";
 
 import { PersonDetails, PersonList } from "../sw-components";
 import Row from "../row/row";
 
 const PeoplePage = () => {
-  const [itemId, onItemSelected, setItemId] = usePageState();
-
-  const onDataLoaded = (data) => {
-    if (data && data.length) {
-      setItemId(data[0].id);
-    }
-  }
+  const [onItemSelected] = useItemNavigate();
 
   return (
     <Row
       left={(
         <PersonList 
-          onItemSelected={onItemSelected} 
-          onDataLoaded={onDataLoaded}/>
+          onItemSelected={onItemSelected} />
       )}
-      right={<PersonDetails itemId={itemId} />} />
+      right={<PersonDetails />} />
   );
 }
 

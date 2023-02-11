@@ -23,23 +23,23 @@ const App = () => {
       <ErrorBoundary>
         <Header />
         <RandomPlanet />
-        {/* <Routes>
+        <Routes>
           <Route path='/' element={<WelcomePage />} />
-          <Route path='/people' element={<PeoplePage />} />
+          {/* <Route path='/people' element={<PeoplePage />} />
           <Route path='/starships'>
             <Route path=':id' element={<StarshipPage />} />
             <Route path='' element={<StarshipPage />} />
-          </Route>
-          <Route path='/planets'>
+          </Route> */}
+          <Route path='/planets/:page?'>
             <Route path=':id' element={<PlanetPage />} />
             <Route path='' element={<PlanetPage />} />
           </Route>
-          <Route path='vehicles'>
+          {/* <Route path='vehicles'>
             <Route path=':id' element={<VehiclesPage />} />
             <Route path='' element={<VehiclesPage />} />
           </Route>
-          <Route path='*' element={<NotFound />} />
-        </Routes> */}
+          <Route path='*' element={<NotFound />} /> */}
+        </Routes>
       </ErrorBoundary>
     </div>
   );
