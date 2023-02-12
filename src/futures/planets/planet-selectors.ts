@@ -10,6 +10,14 @@ export const {
 
 export const selectStatus = ((state: RootState) => state.planets.status);
 export const selectError = ((state: RootState) => state.planets.error);
+export const selectPlanetPagination = ((state: RootState) => {
+  return {
+    next: state.planets.next,
+    previous: state.planets.previous,
+    currPage: state.planets.currPage
+  }
+})
 
 export type SelectAllPlanets = typeof selectAllPlanets;
 export type SelectPlanetById = typeof selectPlanetById;
+export type SelectPlanetPagination = typeof selectPlanetPagination;

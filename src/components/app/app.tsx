@@ -30,9 +30,11 @@ const App = () => {
             <Route path=':id' element={<StarshipPage />} />
             <Route path='' element={<StarshipPage />} />
           </Route> */}
-          <Route path='/planets/:page?'>
-            <Route path=':id' element={<PlanetPage />} />
-            <Route path='' element={<PlanetPage />} />
+          <Route path='/planets'>
+            <Route path=':page?'>
+              <Route path=':id' element={<PlanetPage />} />
+              <Route path='' element={<PlanetPage />} />
+            </Route>
           </Route>
           {/* <Route path='vehicles'>
             <Route path=':id' element={<VehiclesPage />} />

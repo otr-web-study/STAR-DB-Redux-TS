@@ -3,6 +3,7 @@ import ItemList from "../item-list";
 import { loadPlanets, LoadPlanetsAction } from 'futures/planets/planet-actions';
 import { selectAllPlanets, SelectAllPlanets } from 'futures/planets/planet-selectors';
 import { Planet } from 'types';
+import Pagination from 'components/pagination';
 
 type RenderNameParams = { name: string };
 type RenderModelAndNameParams = { model: string, name: string };
@@ -39,6 +40,7 @@ const PlanetList = (props: ItemListProps) => {
         selector={selectAllPlanets}
         renderItem={renderName}
         {...props} />
+      <Pagination />
     </ErrorBoundary>
   );
 }

@@ -13,7 +13,7 @@ export const loadPlanets = createAsyncThunk<
     extra: Extra,
   }
 >(
-  'planet/fetchAllPlanets',
+  'planet/fetchPlanets',
   async (page, {
     extra: { client },
   }) => {

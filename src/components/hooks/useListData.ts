@@ -16,12 +16,14 @@ const useListData = <T extends LoadPlanetsAction, S extends Selector, U>(
   const { page } = useParams();
   const navigate = useNavigate();
 
-  if(!page) {
-    navigate('1');
-  }
+  useEffect(() => {
+    if(!page) {
+      navigate('1');
+    }
+  }, [page, navigate])
 
   useEffect(() => {
-    const needDispatch = ((!itemList && page) || (page && page !== currPage));
+    const needDispatch = (page && (!itemList || page !== currPage));
     if (needDispatch) {
       dispatch(actionCreator(page));
       return

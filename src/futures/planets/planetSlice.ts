@@ -20,6 +20,7 @@ const planetSlice = createSlice({
       .addCase(loadPlanets.rejected, (state) => {
         state.status = 'rejected';
         state.error = 'Unknown error';
+        state.currPage = '1';
       })
       .addCase(loadPlanets.fulfilled, (state, action) => {
         const { items, next, previous, page } = action.payload;
