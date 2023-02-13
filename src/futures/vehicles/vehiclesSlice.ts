@@ -1,36 +1,36 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 
-import { Planet } from "types";
-import { loadPlanets } from "./planet-actions";
+import { Vehicle } from "types";
+import { loadVehicles } from "./vehicle-actions";
 import { defaultState, DefaultState } from "futures/state";
 
-export const planetsAdapter = createEntityAdapter<Planet>();
+export const vehiclesAdapter = createEntityAdapter<Vehicle>();
 
-const initialState = planetsAdapter.getInitialState<DefaultState>(defaultState);
+const initialState = vehiclesAdapter.getInitialState<DefaultState>(defaultState);
 
-const planetSlice = createSlice({
-  name: 'planets',
+const vehicleSlice = createSlice({
+  name: 'vehicles',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(loadPlanets.pending, (state) => {
+      .addCase(loadVehicles.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(loadPlanets.rejected, (state) => {
+      .addCase(loadVehicles.rejected, (state) => {
         state.status = 'rejected';
         state.error = 'Unknown error';
         state.currPage = '1';
       })
-      .addCase(loadPlanets.fulfilled, (state, action) => {
+      .addCase(loadVehicles.fulfilled, (state, action) => {
         const { items, next, previous, page } = action.payload;
         state.status = 'received';
         state.next = next;
         state.previous = previous;
         state.currPage = page;
-        planetsAdapter.setAll(state, items);
+        vehiclesAdapter.setAll(state, items);
       })
   }
 });
 
-export default planetSlice.reducer;
+export default vehicleSlice.reducer;

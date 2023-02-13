@@ -1,5 +1,6 @@
 export interface Vehicle {
   id: string,
+  image: string,
   name: string,
   model: string,
   manufacturer: string,
@@ -12,7 +13,7 @@ export interface Vehicle {
 
 export interface ApiVehicle extends Exclude<
   Vehicle, 
-  'id' | 'costInCredits' | 'maxSpeed' | 'vehicleClass'
+  'id' | 'image' | 'costInCredits' | 'maxSpeed' | 'vehicleClass'
 > {
   url: string,
   cost_in_credits: string,

@@ -25,22 +25,31 @@ const App = () => {
         <RandomPlanet />
         <Routes>
           <Route path='/' element={<WelcomePage />} />
-          {/* <Route path='/people' element={<PeoplePage />} />
+          <Route path='/people'>
+            <Route path=':page?'>
+              <Route path=':id' element={<PeoplePage />} />
+              <Route path='' element={<PeoplePage />} />
+            </Route>
+          </Route>
           <Route path='/starships'>
-            <Route path=':id' element={<StarshipPage />} />
-            <Route path='' element={<StarshipPage />} />
-          </Route> */}
+            <Route path=':page?'>
+              <Route path=':id' element={<StarshipPage />} />
+              <Route path='' element={<StarshipPage />} />
+            </Route>
+          </Route>
           <Route path='/planets'>
             <Route path=':page?'>
               <Route path=':id' element={<PlanetPage />} />
               <Route path='' element={<PlanetPage />} />
             </Route>
           </Route>
-          {/* <Route path='vehicles'>
-            <Route path=':id' element={<VehiclesPage />} />
-            <Route path='' element={<VehiclesPage />} />
+          <Route path='vehicles'>
+            <Route path=':page?'>
+              <Route path=':id' element={<VehiclesPage />} />
+              <Route path='' element={<VehiclesPage />} />
+            </Route>
           </Route>
-          <Route path='*' element={<NotFound />} /> */}
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </ErrorBoundary>
     </div>

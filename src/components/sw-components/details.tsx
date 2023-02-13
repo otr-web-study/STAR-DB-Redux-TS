@@ -1,32 +1,37 @@
 import ErrorBoundary from '../error-boundary';
 import ItemDetails, { Record } from "../item-details/item-details";
 import { SelectPlanetById, selectPlanetById } from 'futures/planets/planet-selectors';
-import { Planet } from 'types';
+import { SelectPersonById, selectPersonById } from 'futures/people/people-selectors';
+import { Person, Planet } from 'types';
 
 
 const PersonDetails = () => {
+  const PersonDetails = ItemDetails<Person, SelectPersonById>;
+  const RecordPerson = Record<Person>;
 
   return (
     <ErrorBoundary>
-      {/* <ItemDetails>
-        <Record field='gender' label='Gender' />
-        <Record field='birthYear' label='Birth Year' />
-        <Record field='eyeColor' label='Eye Color' />
-      </ItemDetails> */}
+      <PersonDetails
+        selector={selectPersonById}>
+        <RecordPerson field='gender' label='Gender' />
+        <RecordPerson field='birthYear' label='Birth Year' />
+        <RecordPerson field='eyeColor' label='Eye Color' />
+      </PersonDetails>
     </ErrorBoundary>
   );
 };
 
 const PlanetDetails = () => {
   const PlanetDetails = ItemDetails<Planet, SelectPlanetById>;
+  const RecordPlanet = Record<Planet>;
 
   return (
     <ErrorBoundary>
       <PlanetDetails
         selector={selectPlanetById}>
-        <Record field='population' label='Population' />
-        <Record field='rotationPeriod' label='Rotation Period' />
-        <Record field='diameter' label='Diameter' />
+        <RecordPlanet field='population' label='Population' />
+        <RecordPlanet field='rotationPeriod' label='Rotation Period' />
+        <RecordPlanet field='diameter' label='Diameter' />
       </PlanetDetails>
     </ErrorBoundary>
   );

@@ -50,9 +50,9 @@ export class SwapiService {
     return allItems;
   }
 
-  getAllPeople = async (): Promise<Person[]> => {
-    const res = await this.getResource<ServiceMultipleResponse<ApiPerson>>('/people/');
-    return res.results.map(this._transformPerson);
+  getPeople = async (page: string): Promise<MultipleResponse<Person>> => {
+    const res = await this.getResource<ServiceMultipleResponse<ApiPerson>>(`/people/?page=${page}`);
+    return this._convertMultipleResponse<ApiPerson, Person>(res, page, this._transformPerson);
   }
 
   getPerson = async (id: string): Promise<Person> => {
@@ -62,12 +62,7 @@ export class SwapiService {
 
   getPlanets = async (page: string): Promise<MultipleResponse<Planet>> => {
     const res = await this.getResource<ServiceMultipleResponse<ApiPlanet>>(`/planets/?page=${page}`);
-    return {
-      next: !!res.next,
-      previous: !!res.previous,
-      items: res.results.map(this._transformPlanet),
-      page: page
-    };
+    return this._convertMultipleResponse<ApiPlanet, Planet>(res, page, this._transformPlanet);
   }
 
   getPlanet = async (id: string): Promise<Planet> => {
@@ -75,9 +70,9 @@ export class SwapiService {
     return this._transformPlanet(planet);
   }
 
-  getAllStarships = async (): Promise<Starship[]> => {
-    const res = await this.getResource<ServiceMultipleResponse<ApiStarship>>('/starships/');
-    return res.results.map(this._transformStarship);
+  getStarships = async (page: string): Promise<MultipleResponse<Starship>> => {
+    const res = await this.getResource<ServiceMultipleResponse<ApiStarship>>(`/starships/?page=${page}`);
+    return this._convertMultipleResponse<ApiStarship, Starship>(res, page, this._transformStarship);
   }
 
   getStarship = async (id: string): Promise<Starship> => {
@@ -85,9 +80,9 @@ export class SwapiService {
     return this._transformStarship(starship);
   }
 
-  getAllVehicles = async (): Promise<Vehicle[]> => {
-    const res = await this.getResource<ServiceMultipleResponse<ApiVehicle>>('/vehicles/');
-    return res.results.map(this._transformVehicle);
+  getVehicles = async (page: string): Promise<MultipleResponse<Vehicle>> => {
+    const res = await this.getResource<ServiceMultipleResponse<ApiVehicle>>(`/vehicles/?page=${page}`);
+    return this._convertMultipleResponse<ApiVehicle, Vehicle>(res, page, this._transformVehicle);
   }
 
   getVehicle = async (id: string): Promise<Vehicle> => {
@@ -95,7 +90,7 @@ export class SwapiService {
     return this._transformVehicle(vehicle);
   }
 
-  getPersonImage = ({ id }: Person): string => {
+  getPersonImage = (id: string): string => {
     return `${this._imageBase}/characters/${id}.jpg`;
   }
 
@@ -103,11 +98,11 @@ export class SwapiService {
     return `${this._imageBase}/planets/${id}.jpg`;
   }
 
-  getStarshipImage = ({ id }: Starship): string => {
+  getStarshipImage = (id: string): string => {
     return `${this._imageBase}/starships/${id}.jpg`;
   }
 
-  getVehicleImage = ({ id }: Vehicle): string => {
+  getVehicleImage = (id: string): string => {
     return `${this._imageBase}/vehicles/${id}.jpg`;
   }
 
@@ -134,8 +129,11 @@ export class SwapiService {
   }
   
   _transformStarship = (starship: ApiStarship): Starship => {
+    const id = this._extractId(starship);
+
     return {
-      id: this._extractId(starship),
+      id,
+      image: this.getStarshipImage(id),
       name: starship.name,
       model: starship.model,
       manufacturer: starship.manufacturer,
@@ -148,8 +146,11 @@ export class SwapiService {
   }
 
   _transformVehicle = (vehicle: ApiVehicle): Vehicle => {
+    const id = this._extractId(vehicle);
+
     return {
-      id: this._extractId(vehicle),
+      id,
+      image: this.getVehicleImage(id),
       name: vehicle.name,
       model: vehicle.model,
       manufacturer: vehicle.manufacturer,
@@ -162,14 +163,30 @@ export class SwapiService {
   }
 
   _transformPerson = (person: ApiPerson): Person => {
+    const id = this._extractId(person);
+
     return {
-      id: this._extractId(person),
+      id,
+      image: this.getPersonImage(id),
       name: person.name,
       gender: person.gender,
       birthYear: person.birth_year,
       eyeColor: person.eye_color,
     }
   }
+
+  _convertMultipleResponse = <
+    T extends ApiType, U extends LocalType
+  >(res: ServiceMultipleResponse<T>,
+    page: string,
+    transform: (item: T) => U): MultipleResponse<U> => {
+    return {
+      next: !!res.next,
+      previous: !!res.previous,
+      items: res.results.map(transform),
+      page: page,
+    }
+  } 
 }
 
 const swapiService = new SwapiService();

@@ -1,23 +1,26 @@
-import { useListData } from '../hooks';
-import { LoadPlanetsAction } from 'futures/planets/planet-actions';
-import { Planet } from 'types';
+import { useListData, useItemNavigate } from '../hooks';
+import { AllItems } from 'types/items';
+import { AllLoadActions } from 'types/actions';
 import Spinner from '../spinner';
-import { ItemListProps, RenderFunction } from 'components/sw-components/item-lists';
+import { RenderFunction } from 'components/sw-components/item-lists';
 import { Selector } from 'store';
 import './item-list.css';
 
-type ExtItemListProps<T, S> = {
+type ItemListProps<T, S> = {
   actionCreator: T,
   selector: S,
   renderItem: RenderFunction,
-} & ItemListProps;
+};
 
 const ItemList = <
-  T extends LoadPlanetsAction, S extends Selector, U extends Planet
->({ actionCreator, selector, onItemSelected, renderItem }: ExtItemListProps<T, S>) => {
-  const [itemList] = useListData<T, S, U>(actionCreator, selector);
+  T extends AllLoadActions, S extends Selector, U extends AllItems
+>({ actionCreator, selector, renderItem }: ItemListProps<T, S>) => {
+  const [ itemList, status ] = useListData<T, S, U>(actionCreator, selector);
+  const [onItemSelected] = useItemNavigate();
 
-  const renderItems = (arr: U[]) => arr.map(({ id, ...item }) => {
+  const renderItems = (arr: U[]) => arr.map((item) => {
+    const { id } = item;
+
     const label = renderItem(item);
 
     return (
@@ -29,8 +32,8 @@ const ItemList = <
     )
   });
 
-  const spinner = !itemList ? <Spinner /> : null;
-  const content = itemList ? renderItems(itemList) : null
+  const spinner = status === 'loading' ? <Spinner /> : null;
+  const content = status === 'received' && itemList ? renderItems(itemList) : null
 
   return (
     <ul className="item-list list-group">

@@ -1,8 +1,9 @@
 import { usePagination } from 'components/hooks';
+import { Selector } from 'store';
 import './pagination.css';
 
-const Pagination = () => {
-  const [next, previous, onNextClick, onPreviousClick] = usePagination();
+const Pagination = <S extends Selector>({ selector }: {selector: S}) => {
+  const [next, previous, onNextClick, onPreviousClick] = usePagination<S>(selector);
 
   return (
     <div className='pagination'>

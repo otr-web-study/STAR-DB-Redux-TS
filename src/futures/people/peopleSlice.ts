@@ -1,36 +1,36 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 
-import { Planet } from "types";
-import { loadPlanets } from "./planet-actions";
+import { Person } from "types";
+import { loadPeople } from "./people-actions";
 import { defaultState, DefaultState } from "futures/state";
 
-export const planetsAdapter = createEntityAdapter<Planet>();
+export const peopleAdapter = createEntityAdapter<Person>();
 
-const initialState = planetsAdapter.getInitialState<DefaultState>(defaultState);
+const initialState = peopleAdapter.getInitialState<DefaultState>(defaultState);
 
-const planetSlice = createSlice({
-  name: 'planets',
+const peopleSlice = createSlice({
+  name: 'people',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(loadPlanets.pending, (state) => {
+      .addCase(loadPeople.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(loadPlanets.rejected, (state) => {
+      .addCase(loadPeople.rejected, (state) => {
         state.status = 'rejected';
         state.error = 'Unknown error';
         state.currPage = '1';
       })
-      .addCase(loadPlanets.fulfilled, (state, action) => {
+      .addCase(loadPeople.fulfilled, (state, action) => {
         const { items, next, previous, page } = action.payload;
         state.status = 'received';
         state.next = next;
         state.previous = previous;
         state.currPage = page;
-        planetsAdapter.setAll(state, items);
+        peopleAdapter.setAll(state, items);
       })
   }
 });
 
-export default planetSlice.reducer;
+export default peopleSlice.reducer;

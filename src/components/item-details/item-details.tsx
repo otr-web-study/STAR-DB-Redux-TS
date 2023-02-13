@@ -1,17 +1,16 @@
 import { Fragment, Children, cloneElement, ReactElement } from 'react';
 
 import { useDetailData } from 'components/hooks';
-import { Planet } from 'types';
 
 import './item-details.css';
 import { AllItems } from 'types/items';
 import { SelectItemById } from 'types/selectors';
 
 
-interface RecordProps {
+interface RecordProps<T> {
   label: string,
-  field: keyof Planet,
-  item?: Planet,
+  field: keyof T,
+  item?: T,
 }
 
 export interface ItemDetailsProps<S> {
@@ -20,21 +19,23 @@ export interface ItemDetailsProps<S> {
 }
 
 interface ItemViewProps {
-  item: Planet,
+  item: AllItems,
   image: string | undefined,
   onImageError: () => void,
   children: ReactElement<ItemViewProps>[],
 }
 
-const Record = ({ item, field, label }: RecordProps) => {
+const Record = <T extends AllItems>({ item, field, label }: RecordProps<T>) => {
   if (!item) {
     return null;
   }
+
+  const value = item[field] as string;
   
   return (
     <li className="list-group-item">
       <span className="term">{label}</span>
-      <span>{item[field]}</span>
+      <span>{value}</span>
     </li>
   );
 }

@@ -1,16 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from 'redux-hooks';
-import { selectPlanetPagination } from 'futures/planets/planet-selectors';
+import { Selector } from 'store';
 
-const usePagination = (): [boolean, boolean, () => void, () => void] => {
-  const { next, previous, currPage } = useAppSelector(selectPlanetPagination);
+const usePagination = <S extends Selector>(selector: S): [boolean, boolean, () => void, () => void] => {
+  const { next, previous, currPage } = useAppSelector(selector);
   const navigate = useNavigate();
   const { id } = useParams();
   const page = parseInt(currPage);
 
   const onNextClick = () => {
-    console.log('click')
     if (!next) {
       return;
     }
