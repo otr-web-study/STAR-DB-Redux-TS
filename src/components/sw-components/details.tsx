@@ -2,7 +2,10 @@ import ErrorBoundary from '../error-boundary';
 import ItemDetails, { Record } from "../item-details/item-details";
 import { SelectPlanetById, selectPlanetById } from 'futures/planets/planet-selectors';
 import { SelectPersonById, selectPersonById } from 'futures/people/people-selectors';
-import { Person, Planet } from 'types';
+import { SelectStarshipById, selectStarshipById } from 'futures/starships/starship-selector';
+import { selectVehicleById, SelectVehicleById } from 'futures/vehicles/vehicle-selector';
+import { Person, Planet, Starship, Vehicle } from 'types';
+
 
 
 const PersonDetails = () => {
@@ -38,30 +41,38 @@ const PlanetDetails = () => {
 }
 
 const StarshipDetails = () => {
+  const StarshipDetail = ItemDetails<Starship, SelectStarshipById>;
+  const RecordStarship = Record<Starship>;
+
   return (
     <ErrorBoundary>
-      {/* <ItemDetails>
-        <Record field='model' label='Model' />
-        <Record field='manufacturer' label='Manufacturer' />
-        <Record field='crew' label='Crew' />
-        <Record field='passengers' label='Passengers' />
-        <Record field='costInCredits' label='Cost' />
-      </ItemDetails> */}
+      <StarshipDetail
+        selector={selectStarshipById} >
+        <RecordStarship field='model' label='Model' />
+        <RecordStarship field='manufacturer' label='Manufacturer' />
+        <RecordStarship field='crew' label='Crew' />
+        <RecordStarship field='passengers' label='Passengers' />
+        <RecordStarship field='costInCredits' label='Cost' />
+      </StarshipDetail>
     </ErrorBoundary>
   );
 }
 
 const VehicleDetails = () => {
+  const VehicleDetail = ItemDetails<Vehicle, SelectVehicleById>;
+  const RecordVehicle = Record<Vehicle>;
+
   return (
     <ErrorBoundary>
-      {/* <ItemDetails>
-        <Record field='model' label='Model' />
-        <Record field='manufacturer' label='Manufacturer' />
-        <Record field='length' label='Length' />
-        <Record field='maxSpeed' label='Max Speed' />
-        <Record field='passengers' label='Passengers' />
-        <Record field='costInCredits' label='Cost' />
-      </ItemDetails> */}
+      <VehicleDetail
+        selector={selectVehicleById}>
+        <RecordVehicle field='model' label='Model' />
+        <RecordVehicle field='manufacturer' label='Manufacturer' />
+        <RecordVehicle field='length' label='Length' />
+        <RecordVehicle field='maxSpeed' label='Max Speed' />
+        <RecordVehicle field='passengers' label='Passengers' />
+        <RecordVehicle field='costInCredits' label='Cost' />
+      </VehicleDetail>
     </ErrorBoundary>
   );
 }

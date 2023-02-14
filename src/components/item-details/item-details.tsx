@@ -1,7 +1,6 @@
 import { Fragment, Children, cloneElement, ReactElement } from 'react';
 
 import { useDetailData } from 'components/hooks';
-
 import './item-details.css';
 import { AllItems } from 'types/items';
 import { SelectItemById } from 'types/selectors';

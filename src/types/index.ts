@@ -4,3 +4,7 @@ export * from './vehicle';
 export * from './person';
 export * from './status';
 export * from './extra';
+export * from './actions';
+export * from './items';
+export * from './selectors';
+export * from './renderFunctions';

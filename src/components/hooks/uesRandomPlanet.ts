@@ -2,8 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from 'redux-hooks';
 
 import { loadRandomPlanets } from 'futures/random-planet/random-planet-actions';
-import { selectRandomPlanetById, selectRandomPlanetIds, selectStatus } from 'futures/random-planet/random-planet-selectors';
-
+import { 
+  selectRandomPlanetById, selectRandomPlanetIds, selectStatus 
+} from 'futures/random-planet/random-planet-selectors';
 import imgNotFound from 'images/not_found.jpg';
 import { Planet, Status } from 'types';
 
