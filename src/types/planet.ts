@@ -7,7 +7,7 @@ export interface Planet {
   diameter: string,
 }
 
-export interface ApiPlanet extends Exclude<Planet, 'id' | 'image' | 'rotationPeriod'> {
+export interface ApiPlanet extends Omit<Planet, 'id' | 'image' | 'rotationPeriod'> {
   url: string,
   rotation_period: string,
 }

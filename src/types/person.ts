@@ -7,7 +7,7 @@ export interface Person {
   eyeColor: string,
 }
 
-export interface ApiPerson extends Exclude<Person, 'id' | 'image' | 'birthYear' | 'eyeColor'> {
+export interface ApiPerson extends Omit<Person, 'id' | 'image' | 'birthYear' | 'eyeColor'> {
   url: string,
   birth_year: string,
   eye_color: string,

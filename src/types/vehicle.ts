@@ -11,7 +11,7 @@ export interface Vehicle {
   vehicleClass: string,
 }
 
-export interface ApiVehicle extends Exclude<
+export interface ApiVehicle extends Omit<
   Vehicle, 
   'id' | 'image' | 'costInCredits' | 'maxSpeed' | 'vehicleClass'
 > {

@@ -11,7 +11,7 @@ export interface Starship {
   cargoCapacity: string,
 }
 
-export interface ApiStarship extends Exclude<Starship, 'id' | 'image' | 'costInCredits' | 'cargoCapacity'> {
+export interface ApiStarship extends Omit<Starship, 'id' | 'image' | 'costInCredits' | 'cargoCapacity'> {
   url: string,
   cost_in_credits: string,
   cargo_capacity: string,
